@@ -8,13 +8,19 @@ The Quarto extension doesn't natively support syntax highlighting for WebR code 
 
 ## Installation
 
-``` bash
+```bash
 git clone https://github.com/jacques-shebehe/quarto-webr-syntax-patcher.git
 cd quarto-webr-syntax-patcher
+
+# Patch both  Positron IDE and VS Code (default)
 ./patch-quarto.sh
+
+# Or patch only a specific IDE:
+./patch-quarto.sh --positron  # Positron IDE only
+./patch-quarto.sh --vscode    # VS Code only
 ```
 
-Then restart VS Code or Positron.
+Then restart the patched IDE(s).
 
 ## What it does
 
@@ -30,41 +36,65 @@ After patching, your `{webr}` code blocks will automatically have R syntax highl
 
 ![](webr-r-syntax-highlighting.png)
 
+## Command-Line Options
+
+The patcher supports the following options:
+
+```bash
+./patch-quarto.sh [--positron|--vscode|--both]
+```
+
+- `--positron` - Patch only Positron IDE
+- `--vscode` - Patch only VS Code
+- `--both` - Patch both IDEs (default)
+- `-h, --help` - Show help message
+
 ## After Quarto Extension Updates
 
 When the Quarto extension is updated, you'll need to re-run the patcher:
 
-``` bash
+```bash
 ./patch-quarto.sh
 ```
 
-The script automatically: - Detects your IDE (VS Code or Positron) - Finds the Quarto extension - Checks if already patched - Creates backups before modifying
+The script automatically:
+
+- Finds all installed Quarto extensions
+- Checks if already patched
+- Creates backups before modifying
+- Supports patching specific IDEs or both
 
 ## Uninstalling
 
-To restore the original Quarto extension:
+To restore the original Quarto extension, use the unpatch script:
 
-``` bash
-# For Positron
-cp ~/.positron/extensions/quarto.quarto-*/syntaxes/quarto.tmLanguage.backup \
-   ~/.positron/extensions/quarto.quarto-*/syntaxes/quarto.tmLanguage
-cp ~/.positron/extensions/quarto.quarto-*/package.json.backup \
-   ~/.positron/extensions/quarto.quarto-*/package.json
+```bash
+# Unpatch both IDEs (default)
+./unpatch-quarto.sh
 
-# For VS Code
-cp ~/.vscode/extensions/quarto.quarto-*/syntaxes/quarto.tmLanguage.backup \
-   ~/.vscode/extensions/quarto.quarto-*/syntaxes/quarto.tmLanguage
-cp ~/.vscode/extensions/quarto.quarto-*/package.json.backup \
-   ~/.vscode/extensions/quarto.quarto-*/package.json
+# Or unpatch only a specific IDE:
+./unpatch-quarto.sh --positron  # Positron only
+./unpatch-quarto.sh --vscode    # VS Code only
 ```
 
-Then restart your IDE.
+The unpatch script will:
+
+- Automatically find patched extensions
+- Restore original files from backups
+- Verify the restoration was successful
+- Inform you about backup files that can be deleted
+
+Then restart the IDE(s).
 
 ## Requirements
 
--   macOS or Linux
--   VS Code or Positron with the Quarto extension installed
--   Bash shell
+- Windows, macOS, or Linux
+- VS Code or Positron with the Quarto extension installed
+- Bash shell (Git Bash on Windows)
+
+## Acknowledgments
+
+This tool was crafted with assistance from the AI in [Warp Terminal](https://www.warp.dev/), which helped make the patcher cross-platform and resolve Windows compatibility issues.
 
 ## License
 
